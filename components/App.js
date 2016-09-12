@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import SongList from './SongList';
+
 import {
   connectSocket,
   disconnectSocket,
@@ -24,7 +26,7 @@ class App extends Component {
         <br/>
         <input ref="message"></input>
         <button onClick={() => dispatch(sendMessage(this.refs.message.value)) }>Send Message</button>
-        <div>{display}</div>
+        <div><SongList songs={[]}/></div>
       </div>
     )
   }
