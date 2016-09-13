@@ -7,17 +7,34 @@ var rethink = r.connect( {host: 'localhost', port: 28015});
 
 app.use(express.static('public'));
 
-app.get('/', function(req, res){
+app.get('/upvote/:songId', (req, response) => {
+  var songId = req.params.songId;
+  console.log(songId)
+  var song = rethink.then(connection => r.table('songs').get(songId).run(connection).then(res => {
+    var likes = res.likes + 1;
+    r.table('songs').get(songId).update({
+      likes: likes
+    }).run(connection).then(result => {
+      var updatedSong = res;
+      res.likes = res.likes + 1;
+      response.json(res);
+    })
+  }));
+})
+
+app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
 function updateCursor(cursor, socket) {
   cursor && cursor.each((err, c) => {
-    socket.emit('result', {
-      result: {
-        key: c
-      }
-    })
+    emit(socket, c, 'update')
+  })
+}
+
+function emit(socket, result, name) {
+  socket.emit(name, {
+    result
   })
 }
 
@@ -25,7 +42,17 @@ function watchForChanges(connection, socket) {
   console.log('songs');
   r.table('songs').orderBy({
     index: 'likes'
-  }).changes().run(connection)
+  }).run(connection)
+    .then(cursor => {
+      cursor.toArray((err, result) => {
+        var resultObj = result.reduce((acc, curr) => {
+          return Object.assign(acc, {[curr.id]: curr});
+        }, {})
+        emit(socket, resultObj, 'initialResult')
+      })
+    })
+
+  r.table('songs').changes().run(connection)
     .then(cursor => {
       updateCursor(cursor, socket)
     });

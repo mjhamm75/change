@@ -1,0 +1,18 @@
+.list {
+  display: flex;
+  flex-direction: column;
+}
+.song {
+  cursor: pointer;
+  padding: 10px 0;
+}
+.song:hover {
+  background: #bfbfbf;
+}
+.song-name {
+  display: inline-block;
+  width: 250px;
+}
+.song-likes {
+  display: inline-block;
+}

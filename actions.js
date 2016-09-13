@@ -1,20 +1,28 @@
 import io from 'socket.io-client';
+import axios from 'axios';
 
 import {
   CONNECT,
   DISCONNECT,
+  INITIAL_RESULT,
   RECEIVE_MESSAGE,
   POST_MESSAGE,
-  UPDATE,
+  UPDATE
 } from './constants.js';
 
 export function connectSocket() {
   return dispatch => {
     let socket = io();
-    socket.on('result', data => {
+    socket.on('initialResult', data => {
+      dispatch({
+        type: INITIAL_RESULT,
+        result: data.result
+      })
+    })
+    socket.on('update', data => {
       dispatch({
         type: UPDATE,
-        name: 'Jason'
+        song: data.result.new_val
       })
     })
     dispatch({
@@ -52,5 +60,16 @@ export function sendMessage(message) {
   return (dispatch, state) => {
     let socket = state().socket;
     socket.emit('message', { message });
+  }
+}
+
+export function upvoteSong(songId) {
+  return dispatch => {
+    axios.get(`/upvote/${songId}`).then(res => {
+      dispatch({
+        type: UPDATE,
+        song: res.data
+      })
+    })
   }
 }

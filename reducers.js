@@ -11,16 +11,21 @@ function socket(state = {}, action) {
   }
 }
 
-function display(state = "", action) {
+function songs(state = [], action) {
   switch(action.type) {
+    case 'INITIAL_RESULT':
+      return action.result;
     case 'UPDATE':
-      return action.name
+      return {
+        ...state,
+        [action.song.id] : action.song,
+      };
     default:
       return state;
   }
 }
 
 export default combineReducers({
-  display,
+  songs,
   socket,
 });

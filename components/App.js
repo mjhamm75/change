@@ -1,20 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import SongList from './SongList';
+import values from 'object.values';
 
 import {
   connectSocket,
   disconnectSocket,
-  sendMessage
+  sendMessage,
+  upvoteSong
 } from './../actions';
+
+import './../app.css';
 
 class App extends Component {
   render() {
     let {
       display,
       dispatch,
+      songs
     } = this.props;
+
+    let upvote = bindActionCreators(upvoteSong, dispatch);
 
     return (
       <div>
@@ -26,7 +34,11 @@ class App extends Component {
         <br/>
         <input ref="message"></input>
         <button onClick={() => dispatch(sendMessage(this.refs.message.value)) }>Send Message</button>
-        <div><SongList songs={[]}/></div>
+        <div>
+          <SongList
+            upvoteSong={upvote}
+            songs={songs}/>
+        </div>
       </div>
     )
   }
@@ -34,6 +46,6 @@ class App extends Component {
 
 export default connect(state => {
   return {
-    display: state.display
+    songs: values(state.songs)
   }
 })(App);
