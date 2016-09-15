@@ -3,6 +3,8 @@ import axios from 'axios';
 
 import {
   CONNECT,
+  CREATE_DISLIKE,
+  CREATE_LIKE,
   DISCONNECT,
   INITIAL_RESULT,
   RECEIVE_MESSAGE,
@@ -29,6 +31,8 @@ export function connectSocket() {
       type: CONNECT,
       socket
     })
+    dispatch(createLikes())
+    dispatch(createDislikes())
   }
 }
 
@@ -71,5 +75,25 @@ export function upvoteSong(songId) {
         song: res.data
       })
     })
+  }
+}
+
+export function createLikes() {
+  return dispatch => {
+    setInterval(() => {
+      dispatch({
+        type: CREATE_LIKE
+      })
+    }, 1000)
+  }
+}
+
+export function createDislikes() {
+  return dispatch => {
+    setInterval(() => {
+      dispatch({
+        type: CREATE_DISLIKE
+      })
+    }, 2000)
   }
 }

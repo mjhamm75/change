@@ -25,7 +25,31 @@ function songs(state = [], action) {
   }
 }
 
+function likes(state = 0, action) {
+  switch(action.type) {
+    case 'CREATE_LIKE':
+      return state + 1;
+    case 'USE_LIKE':
+      return state - 1;
+    default:
+      return state;
+  }
+}
+
+function dislikes(state = 0, action) {
+  switch(action.type) {
+    case 'CREATE_DISLIKE':
+      return state + 1;
+    case 'USE_DISLIKE':
+      return state - 1;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
+  dislikes,
+  likes,
   songs,
   socket,
 });

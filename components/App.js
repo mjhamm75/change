@@ -17,8 +17,10 @@ import './../app.css';
 class App extends Component {
   render() {
     let {
+      dislikes,
       display,
       dispatch,
+      likes,
       songs
     } = this.props;
 
@@ -37,6 +39,13 @@ class App extends Component {
             upvoteSong={upvote}
             songs={songs}/>
         </div>
+        <br />
+        {likes}
+        <br />
+        <br />
+        {dislikes}
+        <br />
+        <br />
       </div>
     )
   }
@@ -44,6 +53,8 @@ class App extends Component {
 
 export default connect(state => {
   return {
-    songs: values(state.songs)
+    songs: values(state.songs),
+    likes: state.likes,
+    dislikes: state.dislikes,
   }
 })(App);
