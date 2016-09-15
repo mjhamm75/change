@@ -15,7 +15,7 @@ app.get('/upvote/:songId', (req, res) => {
       likes: likes
     }).run(connection).then(result => {
       var updatedSong = result;
-      updatedSong.likes = result.likes + 1;
+      updatedSong.likes = likes
       res.json(updatedSong);
     })
   }));
@@ -29,7 +29,7 @@ app.get('/downvote/:songId', (req, res) => {
       likes: likes
     }).run(connection).then(result => {
       var updatedSong = result;
-      updatedSong.likes = result.likes - 1;
+      updatedSong.likes = likes
       res.json(updatedSong);
     })
   }));
