@@ -7,17 +7,16 @@ var rethink = r.connect( {host: 'localhost', port: 28015});
 
 app.use(express.static('public'));
 
-app.get('/upvote/:songId', (req, response) => {
+app.get('/upvote/:songId', (req, res) => {
   var songId = req.params.songId;
-  console.log(songId)
-  var song = rethink.then(connection => r.table('songs').get(songId).run(connection).then(res => {
-    var likes = res.likes + 1;
+  rethink.then(connection => r.table('songs').get(songId).run(connection).then(result => {
+    var likes = result.likes + 1;
     r.table('songs').get(songId).update({
       likes: likes
     }).run(connection).then(result => {
-      var updatedSong = res;
-      res.likes = res.likes + 1;
-      response.json(res);
+      var updatedSong = result;
+      updatedSong.likes = result.likes + 1;
+      res.json(updatedSong);
     })
   }));
 })
@@ -39,7 +38,6 @@ function emit(socket, result, name) {
 }
 
 function watchForChanges(connection, socket) {
-  console.log('songs');
   r.table('songs').orderBy({
     index: 'likes'
   }).run(connection)

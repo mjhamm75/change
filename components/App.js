@@ -32,8 +32,6 @@ class App extends Component {
         <button onClick={() => dispatch(disconnectSocket()) }>DisConnect</button>
         <br/>
         <br/>
-        <input ref="message"></input>
-        <button onClick={() => dispatch(sendMessage(this.refs.message.value)) }>Send Message</button>
         <div>
           <SongList
             upvoteSong={upvote}
