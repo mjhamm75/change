@@ -9,7 +9,8 @@ import {
   INITIAL_RESULT,
   RECEIVE_MESSAGE,
   POST_MESSAGE,
-  UPDATE
+  UPDATE,
+  USE_LIKE
 } from './constants.js';
 
 export function connectSocket() {
@@ -75,6 +76,19 @@ export function upvoteSong(songId) {
         song: res.data
       })
     })
+    dispatch(useLike())
+  }
+}
+
+export function useLike() {
+  return {
+    type: USE_LIKE
+  }
+}
+
+export function useDislike() {
+  return {
+    type: USE_DISLIKE
   }
 }
 
