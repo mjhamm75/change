@@ -21,6 +21,20 @@ app.get('/upvote/:songId', (req, res) => {
   }));
 })
 
+app.get('/downvote/:songId', (req, res) => {
+  var songId = req.params.songId;
+  rethink.then(connection => r.table('songs').get(songId).run(connection).then(result => {
+    var likes = result.likes - 1;
+    r.table('songs').get(songId).update({
+      likes: likes
+    }).run(connection).then(result => {
+      var updatedSong = result;
+      updatedSong.likes = result.likes - 1;
+      res.json(updatedSong);
+    })
+  }));
+})
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });

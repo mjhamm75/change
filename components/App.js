@@ -8,6 +8,7 @@ import values from 'object.values';
 import {
   connectSocket,
   disconnectSocket,
+  downvoteSong,
   sendMessage,
   upvoteSong
 } from './../actions';
@@ -25,6 +26,7 @@ class App extends Component {
     } = this.props;
 
     let upvote = bindActionCreators(upvoteSong, dispatch);
+    let downvote = bindActionCreators(downvoteSong, dispatch);
 
     return (
       <div>
@@ -36,6 +38,7 @@ class App extends Component {
         <br/>
         <div>
           <SongList
+            downvoteSong={downvote}
             upvoteSong={upvote}
             songs={songs}/>
         </div>

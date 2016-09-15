@@ -10,6 +10,7 @@ import {
   RECEIVE_MESSAGE,
   POST_MESSAGE,
   UPDATE,
+  USE_DISLIKE,
   USE_LIKE
 } from './constants.js';
 
@@ -65,6 +66,18 @@ export function sendMessage(message) {
   return (dispatch, state) => {
     let socket = state().socket;
     socket.emit('message', { message });
+  }
+}
+
+export function downvoteSong(songId) {
+  return dispatch => {
+    axios.get(`/downvote/${songId}`).then(res => {
+      dispatch({
+        type: UPDATE,
+        song: res.data
+      })
+    })
+    dispatch(useDislike())
   }
 }
 
